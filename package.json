@@ -4,7 +4,8 @@
   "description": "Encrypted Password Storage.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js"
   },
   "keywords": [
     "bcrypt",
@@ -19,5 +20,8 @@
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "mongoose": "^8.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
