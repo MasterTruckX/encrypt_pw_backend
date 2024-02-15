@@ -1,6 +1,11 @@
+const { ObjectId } = require('bson')
 const mongoose = require('mongoose')
 
 const pwSchema = mongoose.Schema({
+    user_id: {
+        type: ObjectId,
+        require: true
+    },
     company: {
         type: String,
         require: [true, 'Please, type the name of the company.']
