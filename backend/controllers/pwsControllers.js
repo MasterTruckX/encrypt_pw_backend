@@ -2,8 +2,10 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const Pw = require('../models/pwsModel')
+const User = require('../models/usersModel')
 
 const getAllPws = asyncHandler(async(req,res) => {
+
     const pws = await Pw.find()
     res.status(200).json(pws)
 })
@@ -20,6 +22,7 @@ const setPw = asyncHandler(async(req,res) => {
     }
 
     const pw = await Pw.create({
+        user_id: req.user.id,
         company: req.body.company,
         username: req.body.username,
         email: req.body.email,
