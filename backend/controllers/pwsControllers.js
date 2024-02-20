@@ -5,9 +5,19 @@ const Pw = require('../models/pwsModel')
 const User = require('../models/usersModel')
 
 const getAllPws = asyncHandler(async(req,res) => {
-
-    const pws = await Pw.find()
-    res.status(200).json(pws)
+    const user = await User.findById(req.user.id)
+    if(user){
+        try{
+            const pws = await Pw.find( { user_id: req.user.id})
+            res.status(200).json(pws)
+        }catch {
+            res.status(404)
+            throw new Error('This user does not have any registered dates.')
+        }
+    }else{
+        res.status(404)
+        throw new Error('This user does not exist.')
+    }
 })
 
 const getPwById = asyncHandler(async(req,res) => {
@@ -20,13 +30,16 @@ const setPw = asyncHandler(async(req,res) => {
         res.status(400)
         throw new Error('Please fulfill all the mandatory fields.')
     }
+    // generate hash
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
     const pw = await Pw.create({
         user_id: req.user.id,
         company: req.body.company,
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: hashedPassword
     })
     if(pw.username !== req.body.username){
         res.status(500).json({message: 'There was an error. PW was nos created.'})
