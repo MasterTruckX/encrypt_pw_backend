@@ -10,7 +10,7 @@ const protect = asyncHandler(async(req,res,next)=>{
             // obtain token
             token = req.headers.authorization.split(' ')[1]
             //verify token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET)
+            const decoded = jwt.verify(token, process.env.JWT_KEY)
             //obtain user's id from token
             req.user = await User.findById(decoded.id).select('-password')
             next()
@@ -35,7 +35,7 @@ const admin_protect = asyncHandler(async(req,res,next)=>{
                 // obtain token
                 token = req.headers.authorization.split(' ')[1]
                 //verify token
-                const decoded = jwt.verify(token, process.env.JWT_SECRET)
+                const decoded = jwt.verify(token, process.env.JWT_KEY)
                 //obtain user's id from token
                 req.user = await User.findById(decoded.id).select('-password')
                 next()
