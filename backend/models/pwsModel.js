@@ -18,7 +18,7 @@ const pwSchema = mongoose.Schema({
         type: String
     },
     password: {
-        type: String,
+        type: Object,
         required: [true, 'Please, type your password.']
     }
 },{

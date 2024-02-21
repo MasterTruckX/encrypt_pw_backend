@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const Pw = require('../models/pwsModel')
 const User = require('../models/usersModel')
+const {encrypt, decrypt} = require('../middleware/encryptMiddleware')
 
 const getAllPws = asyncHandler(async(req,res) => {
     const user = await User.findById(req.user.id)
@@ -22,7 +23,8 @@ const getAllPws = asyncHandler(async(req,res) => {
 
 const getPwById = asyncHandler(async(req,res) => {
     const pws = await Pw.findById(req.params.id)
-    res.status(200).json(pws)
+    const dehashedpw = decrypt(pws.password)
+    res.status(200).json(dehashedpw)
 })
 
 const setPw = asyncHandler(async(req,res) => {
@@ -31,8 +33,7 @@ const setPw = asyncHandler(async(req,res) => {
         throw new Error('Please fulfill all the mandatory fields.')
     }
     // generate hash
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+    const hashedPassword = encrypt(req.body.password)
 
     const pw = await Pw.create({
         user_id: req.user.id,
