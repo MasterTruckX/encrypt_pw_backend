@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
 const asyncHandler = require('express-async-handler')
 const Pw = require('../models/pwsModel')
 const User = require('../models/usersModel')
@@ -54,7 +52,7 @@ const setPw = asyncHandler(async(req,res) => {
     }
 })
 
-const updatePw = asyncHandler(async(req,res) => {
+const updatePw = asyncHandler(async(req,res,next) => {
     if(!req.body.company || !req.body.username || !req.body.password){
         res.status(400)
         throw new Error('Please fulfill all the mandatory fields.')
@@ -65,7 +63,8 @@ const updatePw = asyncHandler(async(req,res) => {
         res.status(404)
         throw new Error('PW not found.')
     }
-
+    const decrypted = crypto.AES.decrypt(pw.password,key).toString(crypto.enc.Utf8)
+    req.body.password = crypto.AES.encrypt(decrypted,key).toString()
     const updatePw = await Pw.findByIdAndUpdate(req.params.id, req.body, {new: true})
     if(updatePw.username !== req.body.username){
         res.status(500).json({message: 'There was an error. PW was nos created.'})
