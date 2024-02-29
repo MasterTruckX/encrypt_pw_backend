@@ -1,10 +1,10 @@
-const { ObjectId } = require('bson')
 const mongoose = require('mongoose')
 
 const pwSchema = mongoose.Schema({
     user_id: {
-        type: ObjectId,
-        require: true
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: 'User'
     },
     company: {
         type: String,
@@ -18,9 +18,10 @@ const pwSchema = mongoose.Schema({
         type: String
     },
     password: {
-        type: Object,
+        type: String,
         required: [true, 'Please, type your password.']
     }
+
 },{
     timestamps: true
 })

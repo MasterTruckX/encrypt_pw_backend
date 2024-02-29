@@ -16,9 +16,11 @@
   "author": "Jorge Orozco-Otero",
   "license": "MIT",
   "dependencies": {
+    "assert": "^2.1.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
